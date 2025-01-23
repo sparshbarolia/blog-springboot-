@@ -5,11 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+//for lombok
 @Data
 @Document(collection="blog_entries")
 //Without @NoArgsConstructor: If you define no constructor explicitly,
@@ -17,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BlogEntry {
     @Id
-    private ObjectId id;
+    private ObjectId blogId;
 
     @NonNull
     private String title;
@@ -25,4 +29,8 @@ public class BlogEntry {
     private String content;
 
     private LocalDateTime date;
+
+    @DBRef
+    private List<Comment> blogComments = new ArrayList<>();
+
 }

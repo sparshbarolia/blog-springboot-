@@ -13,11 +13,14 @@ public class BlogEntryService {
     @Autowired
     private BlogEntryRepository blogEntryRepository;
 
-    public BlogEntry saveBlogEntry(BlogEntry blogEntry){
-
+    public BlogEntry saveBlogEntryWithDateUpdate(BlogEntry blogEntry){
         blogEntry.setDate(LocalDateTime.now());
         BlogEntry curr = blogEntryRepository.save(blogEntry);
+        return curr;
+    }
 
+    public BlogEntry saveBlogEntryWithoutDateUpdate(BlogEntry blogEntry){
+        BlogEntry curr = blogEntryRepository.save(blogEntry);
         return curr;
     }
 }
