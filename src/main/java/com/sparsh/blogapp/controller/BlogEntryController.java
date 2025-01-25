@@ -1,9 +1,11 @@
 package com.sparsh.blogapp.controller;
 
 import com.sparsh.blogapp.entity.BlogEntry;
+import com.sparsh.blogapp.entity.Category;
 import com.sparsh.blogapp.entity.Comment;
 import com.sparsh.blogapp.repository.BlogEntryRepository;
 import com.sparsh.blogapp.service.BlogEntryService;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/blog")
+@Slf4j
 public class BlogEntryController {
 
     @Autowired
@@ -32,7 +35,7 @@ public class BlogEntryController {
             return new ResponseEntity<>(blogEntry , HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No such blog found.",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -48,13 +51,16 @@ public class BlogEntryController {
                                             .collect(Collectors.toList()) , HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No such blog found.",HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/save-blog")
-    public ResponseEntity<?> saveNewBlog(@RequestBody BlogEntry blogEntry){
-        BlogEntry currSavedEntry = blogEntryService.saveBlogEntryWithDateUpdate(blogEntry);
+    @PostMapping("/category/{inputCategoryName}")
+    public ResponseEntity<?> saveNewBlog(@RequestBody BlogEntry blogEntry, @PathVariable String inputCategoryName){
+        if(blogEntry.getTitle() == null || blogEntry.getTitle().isBlank()){
+            throw new NullPointerException("Title required for this request");
+        }
+        BlogEntry currSavedEntry = blogEntryService.saveBlogEntryWithDateUpdate(blogEntry,inputCategoryName);
 
         return new ResponseEntity<>(currSavedEntry , HttpStatus.CREATED);
     }

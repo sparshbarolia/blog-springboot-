@@ -34,6 +34,11 @@ public class CommentController {
 
     @PostMapping("/save-comment/{id}")
     public ResponseEntity<?> saveComment(@RequestBody Comment inputComment , @PathVariable ObjectId id){
+
+        if(inputComment.getCommentTitle() == null || inputComment.getCommentTitle().isBlank()){
+            throw new NullPointerException("Title required for this request");
+        }
+
         Comment savedComment = commentService.saveComment(inputComment , id);
 
         return new ResponseEntity<>(savedComment , HttpStatus.CREATED);
