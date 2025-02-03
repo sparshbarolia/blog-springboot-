@@ -1,5 +1,7 @@
 package com.sparsh.blogapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -13,21 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Document(collection="categories")
+@Document(collection = "users")
 @NoArgsConstructor
-public class Category {
+public class User {
     @Id
-    private ObjectId categoryId;
+    private ObjectId userId;
 
-    //@Indexed ke liye application properties me ek line add krni pdti h
-    //iski help se searching along userName becomes faster
-    //also same userName ki 2 entries ni hone dega ye
     @Indexed(unique = true)
     @NonNull
-    private String categoryName;
+    private String userName;
 
-    private String categoryDescription;
+    @NonNull
+    private String password;
 
 //    @DBRef
-//    private List<BlogEntry> categoryBlogs = new ArrayList<>();
+//    private List<BlogEntry> blogEntries = new ArrayList<>();
+
+    private List<String> roles;
 }

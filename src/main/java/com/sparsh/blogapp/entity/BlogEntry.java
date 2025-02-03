@@ -1,5 +1,7 @@
 package com.sparsh.blogapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -32,6 +34,12 @@ public class BlogEntry {
     private LocalDateTime date;
 
     @DBRef
-    private List<Comment> blogComments = new ArrayList<>();
+    private User author;
+
+    @DBRef
+    private Category category;
+
+//    @DBRef
+//    private List<Comment> blogComments = new ArrayList<>();
 
 }

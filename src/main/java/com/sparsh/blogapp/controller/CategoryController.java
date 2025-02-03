@@ -19,14 +19,18 @@ public class CategoryController {
     @GetMapping("/{inputCategoryName}")
     public ResponseEntity<?> getCategoryByCategoryName(@PathVariable String inputCategoryName){
         try {
-            return new ResponseEntity<>(categoryService.getCategoryByName(inputCategoryName) , HttpStatus.OK);
+            Category fetchedCategory = categoryService.getCategoryByName(inputCategoryName);
+
+            if(fetchedCategory == null)throw new RuntimeException("No such category found");
+
+            return new ResponseEntity<>(fetchedCategory , HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/list-all")
+    @GetMapping("/all")
     public ResponseEntity<?> getAllCategories(){
         try {
             return new ResponseEntity<>(categoryService.getAllCategories(),HttpStatus.OK);
@@ -44,8 +48,8 @@ public class CategoryController {
             return new ResponseEntity<>(savedCategory , HttpStatus.CREATED);
         }
         catch (Exception e){
-            log.error("agye yaha",e);
-            return new ResponseEntity<>("Category not created",HttpStatus.NO_CONTENT);
+//            log.error("agye yaha",e);
+            return new ResponseEntity<>("Category not created",HttpStatus.BAD_REQUEST);
         }
     }
 

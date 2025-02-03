@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface BlogEntryRepository extends MongoRepository<BlogEntry, ObjectId> {
 
     BlogEntry findByBlogId(ObjectId id);
+
+    long deleteBlogByBlogId(ObjectId id);
 }
