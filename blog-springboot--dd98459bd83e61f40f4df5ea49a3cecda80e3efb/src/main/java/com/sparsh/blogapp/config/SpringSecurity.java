@@ -1,5 +1,6 @@
 package com.sparsh.blogapp.config;
 
+import com.sparsh.blogapp.filter.JwtFilter;
 import com.sparsh.blogapp.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,70 +19,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//@Configuration
-//@EnableWebSecurity
-//public class SpringSecurity {
-//
-////    @Autowired
-////    private UserDetailsServiceImpl userDetailsService;
-//
-//    //did this to prevent circular reference
-//    private final UserDetailsService userDetailsService;
-//
-//    public SpringSecurity(UserDetailsService userDetailsService) {
-//        this.userDetailsService = userDetailsService;
-//    }
-//
-////    @Autowired
-////    private JwtFilter jwtFilter;
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//
-//        return http.authorizeHttpRequests(request -> request
-//                        .requestMatchers("/public/**", "/user/**").permitAll()
-//                        .requestMatchers("/blog/**", "/category/**", "/comment/**").authenticated()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
-////                .csrf(AbstractHttpConfigurer::disable)
-//                .csrf(csrf -> csrf.disable())
-////                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//    }
-//
-////    @Autowired
-////    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-////        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-////    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
-//        return auth.getAuthenticationManager();
-//    }
-//
-//}
-
 @Configuration
 @EnableWebSecurity
 public class SpringSecurity {
 
     private final UserDetailsService userDetailsService;
-//    private final JwtFilter jwtFilter;
-
-//    // Constructor injection to avoid circular dependency
-//    public SpringSecurity(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
-//        this.userDetailsService = userDetailsService;
-//        this.jwtFilter = jwtFilter;
-//    }
+    private final JwtFilter jwtFilter;
 
     // Constructor injection to avoid circular dependency
-    public SpringSecurity(UserDetailsService userDetailsService) {
+    public SpringSecurity(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -96,9 +44,9 @@ public class SpringSecurity {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless session management
                 )
-                .httpBasic(Customizer.withDefaults()) // Enable Basic Authentication
+//                .httpBasic(Customizer.withDefaults()) // Enable Basic Authentication
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
                 ;
         return http.build();
     }

@@ -34,6 +34,7 @@ public class BlogEntryController {
     @Autowired
     private CommentRepository commentRepository;
 
+    //koi bhi kisi blog ko dekh skta h
     @GetMapping("/{blogId}")
     public ResponseEntity<?> getBlogById(@PathVariable ObjectId blogId){
         try {
