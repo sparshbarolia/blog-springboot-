@@ -1,5 +1,6 @@
 package com.sparsh.blogapp.filter;
 
+import com.sparsh.blogapp.service.UserDetailsServiceImpl;
 import com.sparsh.blogapp.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter  extends OncePerRequestFilter {
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;

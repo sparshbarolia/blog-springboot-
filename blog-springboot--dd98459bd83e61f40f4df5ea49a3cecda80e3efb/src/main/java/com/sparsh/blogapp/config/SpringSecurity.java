@@ -36,8 +36,8 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/public/**", "/user/**").permitAll()
-                        .requestMatchers("/blog/**", "/category/**", "/comment/**").authenticated() // Secure these endpoints
+                                .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/blog/**", "/category/**", "/comment/**","/user/**").authenticated() // Secure these endpoints
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Only ADMIN role can access these endpoints
 //                        .anyRequest().permitAll() // Allow all other requests
                 )
